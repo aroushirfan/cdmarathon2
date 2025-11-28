@@ -114,21 +114,7 @@ const SignupPage = () => {
             required
           />
         </div>
-
-        {/* Membership */}
-        <div>
-          <label className="block font-medium mb-1">Membership Status</label>
-          <select
-            name="membership_status"
-            className="w-full border p-2 rounded-md"
-            value={formData.membership_status}
-            onChange={handleChange}
-          >
-            <option value="basic">Basic</option>
-            <option value="premium">Premium</option>
-            <option value="vip">VIP</option>
-          </select>
-        </div>
+        
 
         {/* Address */}
         <div>
