@@ -1,5 +1,8 @@
 # React Jobs Project
 
+Link for backend deployment
+https://cdmarathon2-group7.onrender.com
+
 ## Usage
 
  
