@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 // const userRouter = require("./routes/userRouter");
+const jobRouter = require("./routes/jobRouter");
 const { unknownEndpoint,errorHandler } = require("./middleware/customMiddleware");
 const connectDB = require("./config/db");
 const cors = require("cors");
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 connectDB();
+app.use("/api/jobs", jobRouter);
 
 // Use the userRouter for all /users routes
 // app.use("/api/users", userRouter);
