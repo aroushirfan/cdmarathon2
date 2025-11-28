@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 connectDB();
+//user and jobs
 app.use("/api/users", userRouter);
 app.use("/api/jobs", jobRouter);
 
