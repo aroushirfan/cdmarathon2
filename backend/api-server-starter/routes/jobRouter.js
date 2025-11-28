@@ -7,15 +7,17 @@ const {
   updateJob,
   deleteJob,
 } = require("../controllers/jobControllers");
+const requireAuth= require("../middleware/requireAuth");
 
 // GET /jobs
 router.get("/", getAllJobs);
 
-// POST /jobs
-router.post("/", createJob);
-
 // GET /jobs/:jobId
 router.get("/:jobId", getJobById);
+
+router.use(requireAuth);
+// POST /jobs
+router.post("/", createJob);
 
 // PUT /jobs/:jobId
 router.put("/:jobId", updateJob);

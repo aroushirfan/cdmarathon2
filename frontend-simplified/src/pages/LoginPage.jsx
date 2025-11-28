@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -10,9 +12,35 @@ const LoginPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login form submitted", formData);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Login failed");
+        setLoading(false);
+        return;
+      }
+
+      alert("Logged in successfully!");
+      localStorage.setItem("token", data.token);
+
+      window.location.href = "/jobs"; // redirect to jobs page
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -20,50 +48,18 @@ const LoginPage = () => {
       <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Email */}
-        <div>
-          <label className="block font-medium mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            className="w-full border p-2 rounded-md"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        
+        <input type="email" name="email" placeholder="Email"
+          className="w-full border p-2 rounded-md"
+          value={formData.email} onChange={handleChange} required />
 
-        {/* Password */}
-        <div>
-          <label className="block font-medium mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            className="w-full border p-2 rounded-md"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+        <input type="password" name="password" placeholder="Password"
+          className="w-full border p-2 rounded-md"
+          value={formData.password} onChange={handleChange} required />
 
-          {/* 🔹 Forgot password link */}
-          <p className="text-right mt-1">
-            <button
-              type="button"
-              className="text-indigo-600 text-sm hover:underline"
-              onClick={() => alert("Password reset feature coming soon!")}
-            >
-              Forgot your password?
-            </button>
-          </p>
-        </div>
-
-        {/* Submit button */}
-        <button
-          className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition"
-        >
-          Login
+        <button disabled={loading}
+          className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition">
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </section>

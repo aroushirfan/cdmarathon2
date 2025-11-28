@@ -1,14 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     phone_number: "",
     gender: "",
-    date_of_birth: "",
-    membership_status: "basic",
     street: "",
     city: "",
     zipCode: "",
@@ -18,9 +20,48 @@ const SignupPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup form submitted:", formData);
+    setLoading(true);
+
+    const formattedData = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      phone_number: formData.phone_number,
+      gender: formData.gender,
+      address: {
+        street: formData.street,
+        city: formData.city,
+        zipCode: formData.zipCode,
+      },
+    };
+
+    try {
+      const response = await fetch("/api/users/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formattedData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Signup failed");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      alert("Account created successfully!");
+
+      navigate("/login");
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Something went wrong.");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -29,138 +70,96 @@ const SignupPage = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
 
-        {/* Name */}
-        <div>
-          <label className="block font-medium mb-1">Full Name</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="John Doe"
-            className="w-full border p-2 rounded-md"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          className="w-full border p-2 rounded-md"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
 
-        {/* Email */}
-        <div>
-          <label className="block font-medium mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="example@email.com"
-            className="w-full border p-2 rounded-md"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          className="w-full border p-2 rounded-md"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
-        {/* Password */}
-        <div>
-          <label className="block font-medium mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="********"
-            className="w-full border p-2 rounded-md"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="w-full border p-2 rounded-md"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
 
-        {/* Phone */}
-        <div>
-          <label className="block font-medium mb-1">Phone Number</label>
-          <input
-            type="text"
-            name="phone_number"
-            placeholder="+123 456 789"
-            className="w-full border p-2 rounded-md"
-            value={formData.phone_number}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          name="phone_number"
+          placeholder="Phone Number"
+          className="w-full border p-2 rounded-md"
+          value={formData.phone_number}
+          onChange={handleChange}
+          required
+        />
 
-        {/* Gender */}
-        <div>
-          <label className="block font-medium mb-1">Gender</label>
-          <select
-            name="gender"
-            className="w-full border p-2 rounded-md"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
+        <select
+          name="gender"
+          className="w-full border p-2 rounded-md"
+          value={formData.gender}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
 
-        {/* DOB */}
-        <div>
-          <label className="block font-medium mb-1">Date of Birth</label>
-          <input
-            type="date"
-            name="date_of_birth"
-            className="w-full border p-2 rounded-md"
-            value={formData.date_of_birth}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-
-        {/* Address */}
-        <div>
-          <label className="block font-medium mb-1">Street</label>
-          <input
-            type="text"
-            name="street"
-            placeholder="123 Main Street"
-            className="w-full border p-2 rounded-md"
-            value={formData.street}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          name="street"
+          placeholder="Street"
+          className="w-full border p-2 rounded-md"
+          value={formData.street}
+          onChange={handleChange}
+          required
+        />
 
         <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block font-medium mb-1">City</label>
-            <input
-              type="text"
-              name="city"
-              placeholder="New York"
-              className="w-full border p-2 rounded-md"
-              value={formData.city}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="city"
+            placeholder="City"
+            className="w-full border p-2 rounded-md"
+            value={formData.city}
+            onChange={handleChange}
+            required
+          />
 
-          <div className="flex-1">
-            <label className="block font-medium mb-1">Zip Code</label>
-            <input
-              type="text"
-              name="zipCode"
-              placeholder="10001"
-              className="w-full border p-2 rounded-md"
-              value={formData.zipCode}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <input
+            type="text"
+            name="zipCode"
+            placeholder="Zip Code"
+            className="w-full border p-2 rounded-md"
+            value={formData.zipCode}
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        {/* Submit Button */}
-        <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
-          Create Account
+        <button
+          disabled={loading}
+          className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+        >
+          {loading ? "Creating Account..." : "Sign Up"}
         </button>
       </form>
     </section>
