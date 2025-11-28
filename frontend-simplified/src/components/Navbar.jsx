@@ -18,6 +18,7 @@ const Navbar = () => {
                 React Jobs
               </span>
             </NavLink>
+
             <div className='md:ml-auto'>
               <div className='flex space-x-2'>
                 <NavLink to='/' className={linkClass}>
@@ -29,6 +30,14 @@ const Navbar = () => {
                 <NavLink to='/add-job' className={linkClass}>
                   Add Job
                 </NavLink>
+
+                {/* 🔹 NEW AUTH LINKS */}
+                <NavLink to='/login' className={linkClass}>
+                  Login
+                </NavLink>
+                <NavLink to='/signup' className={linkClass}>
+                  Sign Up
+                </NavLink>
               </div>
             </div>
           </div>
@@ -37,4 +46,5 @@ const Navbar = () => {
     </nav>
   );
 };
+
 export default Navbar;
