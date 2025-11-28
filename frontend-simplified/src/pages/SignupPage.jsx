@@ -16,6 +16,8 @@ const SignupPage = () => {
     zipCode: "",
   });
 
+  const API_URL = "http://localhost:4000/api/users"; // corrected backend URL
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -38,7 +40,7 @@ const SignupPage = () => {
     };
 
     try {
-      const response = await fetch("/api/users/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
@@ -52,13 +54,17 @@ const SignupPage = () => {
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      alert("Account created successfully!");
+      alert("🎉 Account created successfully! Please log in.");
 
+      // ❗ DO NOT auto-login
+      localStorage.removeItem("token");
+
+      // redirect to login page
       navigate("/login");
+
     } catch (error) {
       console.error("Signup error:", error);
-      alert("Something went wrong.");
+      alert("❌ Could not connect to server.");
     }
 
     setLoading(false);

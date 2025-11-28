@@ -8,13 +8,11 @@ import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
 import JobsPage from "./pages/JobsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import JobPage from "./pages/JobPage"; 
+import JobPage from "./pages/JobPage";
 import AddJobPage from "./pages/AddJobPage";
 import EditJobPage from "./pages/EditJobPage";
-
-// 🔹 Added imports
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";     // <-- added
+import SignupPage from "./pages/SignupPage";   // <-- added
 
 const App = () => {
   const router = createBrowserRouter(
@@ -26,9 +24,11 @@ const App = () => {
         <Route path="/edit-job/:id" element={<EditJobPage />} />
         <Route path="/jobs/:id" element={<JobPage />} />
 
+        {/* AUTH ROUTES */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
+        {/* CATCH ALL */}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
