@@ -12,6 +12,10 @@ import JobPage from "./pages/JobPage";
 import AddJobPage from "./pages/AddJobPage";
 import EditJobPage from "./pages/EditJobPage";
 
+// 🔹 Added imports
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
