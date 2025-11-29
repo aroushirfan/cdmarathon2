@@ -1,7 +1,8 @@
 # React Jobs Project
 
 Link for backend deployment
-https://cdmarathon2-group7.onrender.com
+https://cdmarathon2-group7.onrender.com  
+[Self Assessment](https://github.com/aroushirfan/cdmarathon2/blob/main/Self-Assessment.md)
 
 ## Usage
 
